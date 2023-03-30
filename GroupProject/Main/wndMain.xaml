@@ -6,7 +6,84 @@
         xmlns:local="clr-namespace:GroupProject.Main"
         mc:Ignorable="d"
         Title="wndMain" Height="450" Width="800">
-    <Grid>
-        
+    <Window.Background>
+        <ImageBrush ImageSource="/Images/DiamondBackground.jpg" Stretch="UniformToFill"/>
+    </Window.Background>
+    <Grid x:Name="MainGrid">
+        <Grid.RowDefinitions>
+            <RowDefinition Height=".15*"></RowDefinition>
+            <RowDefinition Height="2*"></RowDefinition>
+            <RowDefinition Height=".2*"></RowDefinition>
+        </Grid.RowDefinitions>
+
+        <!--#region Menu-->
+        <Menu x:Name="MainMenu" Grid.Row="0" Background="#FF272B37">
+            <MenuItem Header="Search" VerticalContentAlignment="Center" VerticalAlignment="Center" Foreground="White"/>
+            <MenuItem Header="Edit Items" VerticalContentAlignment="Center" VerticalAlignment="Center" Foreground="White"/>
+        </Menu>
+        <!--#endregion-->
+
+
+        <!--#region Invoice-->
+        <Grid x:Name="InvoiceGrid" Grid.Row="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"></RowDefinition>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <!--#region Add invoice and item data-->
+            <Grid x:Name="InvoiceAndItemEntryGrid">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"></RowDefinition>
+                    <RowDefinition Height="*"></RowDefinition>
+                    <RowDefinition Height="*"></RowDefinition>
+                    <RowDefinition Height="*"></RowDefinition>
+                    <RowDefinition Height="*"></RowDefinition>
+                    <RowDefinition Height="*"></RowDefinition>
+                    <RowDefinition Height="*"></RowDefinition>
+                    <RowDefinition Height="*"></RowDefinition>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width=".5*"></ColumnDefinition>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <Label Grid.Row="0" Grid.ColumnSpan="2" Content="Invoice Information" FontWeight="Bold" VerticalContentAlignment="Center" FontSize="25" FontFamily="Baskerville Old Face" Foreground="White"/>
+                <Label Grid.Row="1" Grid.Column="0" Content="Invoice Date" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" FontSize="16" FontFamily="Baskerville Old Face" Foreground="White"></Label>
+                <Label Grid.Row="2" Grid.Column="0" Content="Invoice Number" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" FontSize="16" FontFamily="Baskerville Old Face" Foreground="White"></Label>
+                <Label Grid.Row="3" Grid.Column="0" Content="Total Cost:" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" FontSize="16" FontFamily="Baskerville Old Face" Foreground="White"></Label>
+                <Label Grid.Row="4" Grid.ColumnSpan="2" Content="Item Information" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" HorizontalAlignment="Left" FontWeight="Bold" FontSize="25" FontFamily="Baskerville Old Face" Foreground="White"></Label>
+                <Label Grid.Row="5" Grid.Column="0" Content="Items:" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" FontSize="16" FontFamily="Baskerville Old Face" Foreground="White"></Label>
+                <Label Grid.Row="6" Grid.Column="0" Content="Cost:" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" FontSize="16" FontFamily="Baskerville Old Face" Foreground="White"></Label>
+
+                <DatePicker x:Name="InvoiceDatePicker" Grid.Row="1" Grid.Column="1" VerticalContentAlignment="Center" Margin="5,5,5,5" FontSize="16"></DatePicker>
+                <Label x:Name="InvoiceNumberDisplayLabel" Grid.Row="2" Grid.Column="1" Content="TBD" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" FontSize="16" FontFamily="Baskerville Old Face" Foreground="White"></Label>
+                <Label x:Name="TotalCostDisplayLabel" Grid.Row="3" Grid.Column="1" Content="$99.99" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" FontSize="16" FontFamily="Baskerville Old Face" Foreground="White"></Label>
+                <ComboBox x:Name="ItemsComboBox" Grid.Row="5" Grid.Column="1" Margin="5,5,5,5"></ComboBox>
+                <Label x:Name="IndividualItemCostDisplayLabel" Grid.Row="6" Grid.Column="1" Content="$24.99" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" FontSize="16" FontFamily="Baskerville Old Face" Foreground="White"></Label>
+                <Grid Grid.Row="7" Grid.Column="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <Button x:Name="RemoveItemButton" Grid.Column="0" Content="Remove Item" Margin="5,5,5,5" FontFamily="Baskerville Old Face"></Button>
+                    <Button x:Name="AddItemButton" Grid.Column="1" Content="Add Item" Margin="5,5,5,5" FontFamily="Baskerville Old Face"></Button>
+                </Grid>
+
+            </Grid>
+
+            <!--#endregion-->
+            <Grid Grid.Column="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"></RowDefinition>
+                    <RowDefinition Height="7*"></RowDefinition>
+                </Grid.RowDefinitions>
+                <Label Grid.Row="0" Content="Items in Invoice" VerticalContentAlignment="Center" FontWeight="Bold" FontSize="25" FontFamily="Baskerville Old Face" Foreground="White"></Label>
+                <DataGrid x:Name="InvoiceDataGrid" Grid.Row="1" d:ItemsSource="{d:SampleData ItemCount=3}" Margin="5,5,5,5">
+                </DataGrid>
+            </Grid>
+        </Grid>
+        <!--#endregion-->
     </Grid>
 </Window>
