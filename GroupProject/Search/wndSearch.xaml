@@ -6,7 +6,36 @@
         xmlns:local="clr-namespace:GroupProject.Search"
         mc:Ignorable="d"
         Title="wndSearch" Height="450" Width="800">
-    <Grid>
-        
+
+    <!--#Search Window Background-->
+    <Window.Background>
+        <ImageBrush ImageSource="/Images/diamonds-background.jpg" Stretch="UniformToFill"/>
+    </Window.Background>
+
+    <!--#Invoice Selection region -->
+    <Grid Margin="0,0,456,0">
+        <Menu Margin="0,0,0,406" Background="#FF130101"/>
+        <Button Content="Search" HorizontalAlignment="Left" Margin="10,5,0,0" VerticalAlignment="Top" Height="18" Cursor="ArrowCD" Foreground="#FFFCFAFA" Background="#FF160000" BorderBrush="#FF090000"/>
+        <Label Content="Invoice Number:" HorizontalAlignment="Left" Margin="16,139,0,0" VerticalAlignment="Top" Width="102" Foreground="#FFF7F4F4"/>
+        <ComboBox x:Name="invoiceNumberComboBox" HorizontalAlignment="Left" Margin="140,146,0,0" VerticalAlignment="Top" Width="120"/>
+        <Label Content="Invoice Date:" HorizontalAlignment="Left" Margin="33,57,0,0" VerticalAlignment="Top" Width="102" Foreground="#FFF7F4F4"/>
+        <DatePicker HorizontalAlignment="Left" Margin="140,59,0,0" VerticalAlignment="Top" Width="120" Height="24"/>
+        <Label Content="Invoice Price:" HorizontalAlignment="Left" Margin="33,241,0,0" VerticalAlignment="Top" Width="102" Foreground="#FFF7F4F4"/>
+        <ComboBox x:Name="invoicePriceComboBox" HorizontalAlignment="Left" Margin="140,245,0,0" VerticalAlignment="Top" Width="120"/>
+        <Button x:Name="SearchWindowclearButton" Content="Clear" HorizontalAlignment="Left" Margin="221,344,0,0" VerticalAlignment="Top" Height="24" Width="82"/>
+        <Button Content="View Selected Invoice" HorizontalAlignment="Left" Margin="59,344,0,0" VerticalAlignment="Top" Height="24" Width="102" FontSize="10"/>
+
+        <!--# Invoice Selection endregion-->
+
+        <!--# Invoice list region -->
+        <Grid Margin="349,5,-455,0">
+            <DataGrid d:ItemsSource="{d:SampleData ItemCount=5}" Margin="0,-4,0,0"/>
+
+
+        </Grid>
+        <!--#Invoice List endregion-->
+
     </Grid>
+
+
 </Window>
