@@ -23,5 +23,19 @@ namespace GroupProject.Main
         {
             InitializeComponent();
         }
+
+        private void SearchMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            // pass the selected invoice id as a reference during window creation
+            // set referenced value in search window so when that window closes, the value is already here and ready to use 
+            // reload main window with selected invoice id regardless if one was actually selected or not 
+        }
+
+        private void EditMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            // pass boolean value by reference ItemsHaveChanged or something along those lines
+            // If any items have changed, requery, re-load combo boxes
+            // If no changes have been made, do nothing 
+        }
     }
 }

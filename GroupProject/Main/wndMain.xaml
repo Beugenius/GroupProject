@@ -18,8 +18,8 @@
 
         <!--#region Menu-->
         <Menu x:Name="MainMenu" Grid.Row="0" Background="#FF272B37">
-            <MenuItem Header="Search" VerticalContentAlignment="Center" VerticalAlignment="Center" Foreground="White"/>
-            <MenuItem Header="Edit Items" VerticalContentAlignment="Center" VerticalAlignment="Center" Foreground="White"/>
+            <MenuItem x:Name="SearchMenuItem" Header="Search" VerticalContentAlignment="Center" VerticalAlignment="Center" Foreground="White" Click="SearchMenuItem_Click"/>
+            <MenuItem x:Name="EditMenuItem" Header="Edit Items" VerticalContentAlignment="Center" VerticalAlignment="Center" Foreground="White" Click="EditMenuItem_Click"/>
         </Menu>
         <!--#endregion-->
 
@@ -77,11 +77,20 @@
             <Grid Grid.Column="1">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*"></RowDefinition>
-                    <RowDefinition Height="7*"></RowDefinition>
+                    <RowDefinition Height="6*"></RowDefinition>
+                    <RowDefinition Height="*"></RowDefinition>
                 </Grid.RowDefinitions>
                 <Label Grid.Row="0" Content="Items in Invoice" VerticalContentAlignment="Center" FontWeight="Bold" FontSize="25" FontFamily="Baskerville Old Face" Foreground="White"></Label>
-                <DataGrid x:Name="InvoiceDataGrid" Grid.Row="1" d:ItemsSource="{d:SampleData ItemCount=3}" Margin="5,5,5,5">
+                <DataGrid x:Name="InvoiceDataGrid" Grid.Row="1" d:ItemsSource="{d:SampleData ItemCount=3}" Margin="5,5,5,0">
                 </DataGrid>
+                <Grid Grid.Row="2">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <Button x:Name="EditInvoiceButton" Grid.Column="0" Content="Edit Invoice" Margin="5,5,5,5" FontFamily="Baskerville Old Face"></Button>
+                    <Button x:Name="SaveInvoiceButton" Grid.Column="1" Content="Save Invoice" Margin="5,5,5,5" FontFamily="Baskerville Old Face"></Button>
+                </Grid>
             </Grid>
         </Grid>
         <!--#endregion-->

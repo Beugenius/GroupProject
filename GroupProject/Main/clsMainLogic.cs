@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace GroupProject.Main
 {
-    internal class clsMainLogic
+    public class clsMainLogic
     {
     }
 }
