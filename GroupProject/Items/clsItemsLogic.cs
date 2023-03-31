@@ -8,5 +8,9 @@ namespace GroupProject.Items
 {
     internal class clsItemsLogic
     {
+        /// <summary>
+        /// If any items has been modified then hasUpdated = true
+        /// </summary>
+        public bool hasUpdated = false;
     }
 }

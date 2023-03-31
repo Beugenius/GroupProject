@@ -6,7 +6,52 @@
         xmlns:local="clr-namespace:GroupProject.Items"
         mc:Ignorable="d"
         Title="wndItems" Height="450" Width="800">
-    <Grid>
-        
+    <Window.Background>
+        <ImageBrush ImageSource="/Images/DiamondBackground.jpg" Stretch="UniformToFill"></ImageBrush>
+    </Window.Background>
+    
+    <Grid Name="MainGrid">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="2*" />
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+
+            <Grid Grid.Column="0">
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Label Grid.Column="0" Grid.Row="0" Content="Code: " Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                <Label Grid.Column="0" Grid.Row="1" Content="Description" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                <Label Grid.Column="0" Grid.Row="2" Content="Cost:" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                <TextBox x:Name="txtbxCode" Grid.Column="1" Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Center" Width="100" Height="25"/>
+                <TextBox x:Name="txtbxDestription" Grid.Column="1" Grid.Row="1" Width="100" Height="25"/>
+                <TextBox x:Name="txtbxCost" Grid.Column="1" Grid.Row="2" Width="100" Height="25"/>
+            </Grid>
+            <Grid Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Button Grid.Column="0" Content="Add Item" Width="100" Height="25"/>
+                <Button Grid.Column="1" Content="Edit Item" Width="100" Height="25"/>
+                <Button Grid.Column="2" Content="Delete Item" Width="100" Height="25"/>
+            </Grid>
+            <Label Name="lblError" Grid.Row="2" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Top"/>
+        </Grid>
+        <DataGrid x:Name="ItemDataGrid" Grid.Column="1" d:ItemsSource="{d:SampleData ItemCount=5}" Margin="25,25,25,25"/>
     </Grid>
 </Window>
