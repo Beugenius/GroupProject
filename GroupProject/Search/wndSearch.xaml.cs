@@ -23,5 +23,15 @@ namespace GroupProject.Search
         {
             InitializeComponent();
         }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            this.Close();
+        }
+
+        private void SearchWindowclearButton_Click(object sender, RoutedEventArgs e)
+        {
+            this.Close();
+        }
     }
 }

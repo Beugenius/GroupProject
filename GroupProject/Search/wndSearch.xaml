@@ -22,8 +22,8 @@
         <DatePicker HorizontalAlignment="Left" Margin="140,59,0,0" VerticalAlignment="Top" Width="120" Height="24"/>
         <Label Content="Invoice Price:" HorizontalAlignment="Left" Margin="33,241,0,0" VerticalAlignment="Top" Width="102" Foreground="#FFF7F4F4"/>
         <ComboBox x:Name="invoicePriceComboBox" HorizontalAlignment="Left" Margin="140,245,0,0" VerticalAlignment="Top" Width="120"/>
-        <Button x:Name="SearchWindowclearButton" Content="Clear" HorizontalAlignment="Left" Margin="221,344,0,0" VerticalAlignment="Top" Height="24" Width="82"/>
-        <Button Content="View Selected Invoice" HorizontalAlignment="Left" Margin="59,344,0,0" VerticalAlignment="Top" Height="24" Width="102" FontSize="10"/>
+        <Button x:Name="SearchWindowclearButton" Content="Clear" HorizontalAlignment="Left" Margin="221,344,0,0" VerticalAlignment="Top" Height="24" Width="82" Click="SearchWindowclearButton_Click"/>
+        <Button x:Name="viewSelectedInvoicebutton" Content="View Selected Invoice" HorizontalAlignment="Left" Margin="59,344,0,0" VerticalAlignment="Top" Height="24" Width="102" FontSize="10" Click="Button_Click"/>
 
         <!--# Invoice Selection endregion-->
 
