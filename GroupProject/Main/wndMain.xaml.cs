@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GroupProject.Search;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -26,6 +27,15 @@ namespace GroupProject.Main
 
         private void SearchMenuItem_Click(object sender, RoutedEventArgs e)
         {
+            try
+            {
+                wndSearch SearchWindow = new();
+                SearchWindow.ShowDialog();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Something broke!"); 
+            }
             // pass the selected invoice id as a reference during window creation
             // set referenced value in search window so when that window closes, the value is already here and ready to use 
             // reload main window with selected invoice id regardless if one was actually selected or not 
