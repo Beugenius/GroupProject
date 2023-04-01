@@ -46,9 +46,9 @@
                     <ColumnDefinition/>
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
-                <Button Grid.Column="0" Content="Add Item" Width="100" Height="25"/>
-                <Button Grid.Column="1" Content="Edit Item" Width="100" Height="25"/>
-                <Button Grid.Column="2" Content="Delete Item" Width="100" Height="25"/>
+                <Button Grid.Column="0" Content="Add Item" Width="100" Height="25" Click="Button_Click"/>
+                <Button Grid.Column="1" Content="Edit Item" Width="100" Height="25" Click="Button_Click_1"/>
+                <Button Grid.Column="2" Content="Delete Item" Width="100" Height="25" Click="Button_Click_2"/>
             </Grid>
             <Label Name="lblError" Grid.Row="2" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Top"/>
         </Grid>

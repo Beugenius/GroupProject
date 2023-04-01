@@ -1,17 +1,7 @@
-﻿using GroupProject.Search;
+﻿using GroupProject.Items;
+using GroupProject.Search;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace GroupProject.Main
 {
@@ -36,16 +26,27 @@ namespace GroupProject.Main
             {
                 MessageBox.Show("Something broke!"); 
             }
-            // pass the selected invoice id as a reference during window creation
-            // set referenced value in search window so when that window closes, the value is already here and ready to use 
+            // pass clsMainLogic type to selected window upon creation wndSearch = new(clsMainLogicObject); 
+            // clsMainLogic int SelectedInvoice will store the invoice id when in the search window
+            // any change in search window will reflect in the clsMainLogic 
             // reload main window with selected invoice id regardless if one was actually selected or not 
         }
 
         private void EditMenuItem_Click(object sender, RoutedEventArgs e)
         {
-            // pass boolean value by reference ItemsHaveChanged or something along those lines
-            // If any items have changed, requery, re-load combo boxes
-            // If no changes have been made, do nothing 
+            try
+            {
+                wndItems ItemsWindow = new();
+                ItemsWindow.ShowDialog();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Something broke!");
+            }
+            // clsMainLogic bool HasItemsChanged will be accessible
+            // if any items change, boolean variable = true, else = false
+            // if true, back in main window, reload combo boxes containing new items 
+            // to refresh combo boxes, requery listitems, then redisplay in combo boxes 
         }
     }
 }
