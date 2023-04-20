@@ -20,7 +20,7 @@ namespace GroupProject.Search
     /// </summary>
     public partial class wndSearch : Window
     {
-        public Invoices SelectedInvoice = new() { InvoiceNum = 5024, InvoiceDate = DateTime.Parse("04/28/2023")};
+        public Invoices SelectedInvoice = new(); // if no invoice is selected, make sure a new() Invoices is returned :) 
         public wndSearch()
         {
             InitializeComponent();

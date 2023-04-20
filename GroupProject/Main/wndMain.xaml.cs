@@ -29,16 +29,22 @@ namespace GroupProject.Main
             {
                 wndSearch SearchWindow = new();
                 SearchWindow.ShowDialog();
-                MainLogicClass.SelectedInvoice = SearchWindow.SelectedInvoice;
-                // set labels and date picker
-                InvoiceDatePicker.SelectedDate = MainLogicClass.SelectedInvoice.InvoiceDate;
-                InvoiceNumberDisplayLabel.Content = MainLogicClass.SelectedInvoice.InvoiceNum;
-                TotalCostDisplayLabel.Content = $"${MainLogicClass.SelectedInvoice.TotalCost}";
-                // Load line items list
-                ReloadLineItems();
-                ReloadInvoiceDataGrid();
-                EditInvoiceButton.IsEnabled = true;
-                SetToReadOnly();
+                var InvoiceFromSearchWindow = SearchWindow.SelectedInvoice;
+                // default / no selected invoice defaults to invoice num == -1 
+                if (InvoiceFromSearchWindow != null && InvoiceFromSearchWindow.InvoiceNum != -1)
+                {
+                    MainLogicClass.SelectedInvoice = InvoiceFromSearchWindow;
+                    // set labels and date picker
+                    InvoiceDatePicker.SelectedDate = MainLogicClass.SelectedInvoice.InvoiceDate;
+                    InvoiceNumberDisplayLabel.Content = MainLogicClass.SelectedInvoice.InvoiceNum;
+                    TotalCostDisplayLabel.Content = $"${MainLogicClass.SelectedInvoice.TotalCost}";
+                    // Load line items list
+                    ReloadLineItems();
+                    ReloadInvoiceDataGrid();
+                    EditInvoiceButton.IsEnabled = true;
+                    SetToReadOnly();
+                }
+                // otherwise, do nothing
             }
             catch (Exception ex)
             {
