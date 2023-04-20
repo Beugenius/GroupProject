@@ -1,4 +1,4 @@
-﻿<Window Style="{DynamicResource WindowStyle1}" x:Class="GroupProject.Main.wndMain"
+﻿<Window x:Class="GroupProject.Main.wndMain"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -182,7 +182,7 @@
         </Style>
     </Window.Resources>
     <Window.Background>
-        <ImageBrush ImageSource="/Images/DiamondBackground.jpg" Stretch="UniformToFill"/>
+        <ImageBrush Stretch="UniformToFill" TileMode="None" ImageSource="/Images/DiamondBackground.jpg"/>
     </Window.Background>
     <Grid x:Name="MainGrid">
         <Grid.RowDefinitions>
