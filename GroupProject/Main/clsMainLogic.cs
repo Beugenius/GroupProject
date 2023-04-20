@@ -12,17 +12,43 @@ namespace GroupProject.Main
 {
     public class clsMainLogic
     {
+        /// <summary>
+        /// Reference to the Main SQL strings 
+        /// </summary>
         public clsMainSQL MainSQLClass = new();
+        /// <summary>
+        /// Reference to the class that accesses the database 
+        /// </summary>
         public DataAccessClass DataAccessClass = new();
+        /// <summary>
+        /// The selected invoice to be referenced in the main window 
+        /// </summary>
         public Invoices SelectedInvoice { get; set; } = new();
-        public List<ItemDesc> ItemsList { get; set; }
+        /// <summary>
+        /// The list of items to display in the main window
+        /// </summary>
+        public List<ItemDesc> ItemsList { get; set; } = new();
+        /// <summary>
+        /// The list of items to add to an invoice, stored here before saving to the database
+        /// </summary>
         public List<ItemDesc> LineItemsToAddToInvoiceOnSaveList { get; set; } = new();
+        /// <summary>
+        /// The list of items to remove from an invoice, stored here before removing from the database  
+        /// </summary>
         public List<ItemDesc> LineItemsToRemoveFromInvoiceOnSaveList { get; set; } = new();
+        /// <summary>
+        /// Main constructor that defaults the SelectedInvoice to new 
+        /// </summary>
         public clsMainLogic()
         {
             SelectedInvoice = new Invoices();
         }
 
+        #region Database Calls 
+        /// <summary>
+        /// Database call to retrieve all items. Converts items into ItemDesc type, and fills up a list of ItemDesc
+        /// </summary>
+        /// <returns>A list of ItemDesc</returns>
         public List<ItemDesc> GetAllItems()
         {
             List<ItemDesc> ItemsListToReturn = new();
@@ -38,14 +64,48 @@ namespace GroupProject.Main
                 };
                 ItemsListToReturn.Add(ItemInRow);
             }
-            int i = 0;
             return ItemsListToReturn;
         }
-        public void LoadItemsList()
+        /// <summary>
+        /// Creates a new invoice in the database 
+        /// </summary>
+        /// <param name="InvoiceDate">Date of the invoice</param>
+        /// <param name="TotalCostInt">Total Cost of the invoice</param>
+        /// <returns>The invoice that was created</returns>
+        public Invoices CreateNewInvoice(DateTime InvoiceDate, int TotalCostInt)
         {
-            ItemsList = GetAllItems();
+            int RowsAffectedInt = DataAccessClass.ExecuteNonQuery(MainSQLClass.CreateNewInvoice(InvoiceDate, TotalCostInt));
+            // Get the invoices from the database, and find the most recently added one with matching criteria 
+            var InvoiceFromDb = GetInvoices().Where(x => x.InvoiceDate == InvoiceDate && x.TotalCost == TotalCostInt).OrderByDescending(x => x.InvoiceNum).First();
+            return InvoiceFromDb;
         }
+        /// <summary>
+        /// Gets all of the invoices in a list.  
+        /// </summary>
+        /// <returns>A list of Invoices</returns>
+        public List<Invoices> GetInvoices()
+        {
 
+            List<Invoices> InvoicesToReturn = new();
+            int InvoicesReturnedInt = 0;
+            var InvoicesFromDb = DataAccessClass.ExecuteSQLStatement(MainSQLClass.GetInvoices(), ref InvoicesReturnedInt).Tables[0].Rows;
+            foreach (DataRow invoice in InvoicesFromDb)
+            {
+                Invoices ItemInRow = new Invoices()
+                {
+                    InvoiceNum = (int)invoice.ItemArray[0],
+                    InvoiceDate = (DateTime)invoice.ItemArray[1],
+                    TotalCost = (int)invoice.ItemArray[2]
+                };
+                InvoicesToReturn.Add(ItemInRow);
+            }
+            return InvoicesToReturn;
+        }
+        /// <summary>
+        /// Gets a list of all the items associated with an invoice
+        /// </summary>
+        /// <param name="invoiceNumber">Invoice number of the associated list</param>
+        /// <returns>A list of ItemDesc associated with a particular invoice</returns>
         public List<ItemDesc> GetAllLineItemsByInvoiceNumber(int invoiceNumber)
         {
             List<ItemDesc> ItemsListToReturn = new();
@@ -64,23 +124,50 @@ namespace GroupProject.Main
             }
             return ItemsListToReturn;
         }
-
-        public void LoadInvoiceItemsAndSetTotalCostOfInvoice()
-        {
-            SelectedInvoice.LineItemsList = GetAllLineItemsByInvoiceNumber(SelectedInvoice.InvoiceNum);
-            Decimal TotalCost = 0.00M;
-            foreach (var item in SelectedInvoice.LineItemsList)
-            {
-                TotalCost += item.Cost;
-            }
-            SelectedInvoice.TotalCost = (int)TotalCost;
-        }
-
+        /// <summary>
+        /// Saves a line item associated with an invoice to the database 
+        /// </summary>
+        /// <param name="InvoiceNumberInt">The associated invoice number</param>
+        /// <param name="LineItemNumber">The line item number to add into the database (needs to be indexed correctly!)</param>
+        /// <param name="ItemCode">The code of the item to add</param>
         public void SaveLineItemToInvoice(int InvoiceNumberInt, int LineItemNumber, string ItemCode)
         {
             int RowsAffected = DataAccessClass.ExecuteNonQuery(MainSQLClass.CreateNewLineItem(InvoiceNumberInt, LineItemNumber, ItemCode));
         }
+        /// <summary>
+        /// Updates the total cost of the selected invoice 
+        /// </summary>
+        private void UpdateInvoiceTotalCost()
+        {
+            int RowsAffectedInt = DataAccessClass.ExecuteNonQuery(MainSQLClass.UpdateInvoiceTotalCost(SelectedInvoice.TotalCost, SelectedInvoice.InvoiceNum));
+        }
+        /// <summary>
+        /// Deletes a line item that is associated with an invoice number
+        /// </summary>
+        /// <param name="InvoiceNumberInt"></param>
+        /// <param name="LineItemNumberInt"></param>
+        public void DeleteLineItemByInvoiceNum(int InvoiceNumberInt, int LineItemNumberInt)
+        {
+            var result = DataAccessClass.ExecuteNonQuery(MainSQLClass.DeleteLineItemByInvoiceId(InvoiceNumberInt, LineItemNumberInt));
+        }
 
+
+        #endregion
+
+        #region Business Logic
+        /// <summary>
+        /// Loads the ItemsList for the ItemsComboBox 
+        /// </summary>
+        public void LoadItemsList()
+        {
+            ItemsList = GetAllItems();
+        }
+        /// <summary>
+        /// Creates and adds an item to the unsaved list of items to add 
+        /// </summary>
+        /// <param name="ItemCodeString">Item code</param>
+        /// <param name="ItemDescriptionString">Description of the item</param>
+        /// <param name="CostDecimal">Cost of the item</param>
         public void AddLineItemToInvoiceUnsaved(string ItemCodeString, string ItemDescriptionString, Decimal CostDecimal)
         {
 
@@ -107,7 +194,12 @@ namespace GroupProject.Main
             }
 
         }
-
+        /// <summary>
+        /// Creates and adds an item to the unsaved list of items to remove 
+        /// </summary>
+        /// <param name="ItemCodeString">Item code</param>
+        /// <param name="ItemDescriptionString">Description of the item</param>
+        /// <param name="CostDecimal">Cost of the item</param>
         public void AddLineItemToBeRemovedFromInvoiceUnsaved(string ItemCodeString, string ItemDescriptionString, Decimal CostDecimal)
         {
             var ItemToRemove = SelectedInvoice.LineItemsList.Where(x => x.ItemCode == ItemCodeString).FirstOrDefault();
@@ -126,7 +218,9 @@ namespace GroupProject.Main
                 LineItemsToRemoveFromInvoiceOnSaveList.Add(ItemToRemove);
             }
         }
-
+        /// <summary>
+        /// Saves the invoice 
+        /// </summary>
         public void SaveInvoice()
         {
             foreach (var itemToRemove in LineItemsToRemoveFromInvoiceOnSaveList)
@@ -149,15 +243,10 @@ namespace GroupProject.Main
             SelectedInvoice.TotalCost = (int)GetTotalCost();
             UpdateInvoiceTotalCost(); 
         }
-
-        private void UpdateInvoiceTotalCost()
-        {
-            int RowsAffectedInt = DataAccessClass.ExecuteNonQuery(MainSQLClass.UpdateInvoiceTotalCost(SelectedInvoice.TotalCost, SelectedInvoice.InvoiceNum));
-        }
-        public void DeleteLineItemByInvoiceNum(int InvoiceNumberInt, int LineItemNumberInt)
-        {
-            var result = DataAccessClass.ExecuteNonQuery(MainSQLClass.DeleteLineItemByInvoiceId(InvoiceNumberInt, LineItemNumberInt));
-        }
+        /// <summary>
+        /// Iterates through all of the items in the invoices line items list and determines total cost of the items 
+        /// </summary>
+        /// <returns>Total cost of items in selected invoices line items list</returns>
         public decimal GetTotalCost()
         {
             decimal TotalCostInt = 0;
@@ -174,31 +263,7 @@ namespace GroupProject.Main
                 InvoiceNum = -1
             };
         }
-        public Invoices CreateNewInvoice(DateTime InvoiceDate, int TotalCostInt)
-        {
-            int RowsAffectedInt = DataAccessClass.ExecuteNonQuery(MainSQLClass.CreateNewInvoice(InvoiceDate, TotalCostInt));
-            var InvoiceFromDb = GetInvoices().Where(x=>x.InvoiceDate == InvoiceDate && x.TotalCost == TotalCostInt).OrderByDescending(x=>x.InvoiceNum).First();
-            return InvoiceFromDb;
-        }
 
-        public List<Invoices> GetInvoices()
-        {
-            
-            List<Invoices> InvoicesToReturn = new();
-            int InvoicesReturnedInt = 0;
-            var InvoicesFromDb = DataAccessClass.ExecuteSQLStatement(MainSQLClass.GetInvoices(), ref InvoicesReturnedInt).Tables[0].Rows;
-            foreach (DataRow invoice in InvoicesFromDb)
-            {
-                Invoices ItemInRow = new Invoices()
-                {
-                    InvoiceNum = (int)invoice.ItemArray[0],
-                    InvoiceDate = (DateTime)invoice.ItemArray[1],
-                    TotalCost = (int)invoice.ItemArray[2]
-                };
-                InvoicesToReturn.Add(ItemInRow);
-            }
-            return InvoicesToReturn;
-        }
-
+        #endregion
     }
 }
