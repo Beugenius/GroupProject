@@ -9,8 +9,9 @@ namespace GroupProject.ViewModels
 {
     public class Invoices
     {
-        public int InvoiceNum { get; set; }
+        public int InvoiceNum { get; set; } = -1;
         public DateTime InvoiceDate { get; set; }
         public int TotalCost { get; set; }
+        public List<ItemDesc> LineItemsList { get; set; } = new();
     }
 }

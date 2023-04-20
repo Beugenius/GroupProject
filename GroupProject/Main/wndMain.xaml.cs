@@ -1,6 +1,8 @@
 ﻿using GroupProject.Items;
 using GroupProject.Search;
+using GroupProject.ViewModels;
 using System;
+using System.Linq;
 using System.Windows;
 
 namespace GroupProject.Main
@@ -10,10 +12,16 @@ namespace GroupProject.Main
     /// </summary>
     public partial class wndMain : Window
     {
+        public clsMainLogic MainLogicClass { get; set; }
+        public bool IsCreatingNewInvoiceBool { get; set; }
         public wndMain()
         {
             InitializeComponent();
+            MainLogicClass = new();
+            MainLogicClass.LoadItemsList();
+            ReloadItemsComboBox();
         }
+        #region Menu
 
         private void SearchMenuItem_Click(object sender, RoutedEventArgs e)
         {
@@ -21,15 +29,21 @@ namespace GroupProject.Main
             {
                 wndSearch SearchWindow = new();
                 SearchWindow.ShowDialog();
+                MainLogicClass.SelectedInvoice = SearchWindow.SelectedInvoice;
+                // set labels and date picker
+                InvoiceDatePicker.SelectedDate = MainLogicClass.SelectedInvoice.InvoiceDate;
+                InvoiceNumberDisplayLabel.Content = MainLogicClass.SelectedInvoice.InvoiceNum;
+                TotalCostDisplayLabel.Content = $"${MainLogicClass.SelectedInvoice.TotalCost}";
+                // Load line items list
+                ReloadLineItems();
+                ReloadInvoiceDataGrid();
+                EditInvoiceButton.IsEnabled = true;
+                SetToReadOnly();
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Something broke!"); 
+                MessageBox.Show("Something broke!");
             }
-            // pass clsMainLogic type to selected window upon creation wndSearch = new(clsMainLogicObject); 
-            // clsMainLogic int SelectedInvoice will store the invoice id when in the search window
-            // any change in search window will reflect in the clsMainLogic 
-            // reload main window with selected invoice id regardless if one was actually selected or not 
         }
 
         private void EditMenuItem_Click(object sender, RoutedEventArgs e)
@@ -38,15 +52,168 @@ namespace GroupProject.Main
             {
                 wndItems ItemsWindow = new();
                 ItemsWindow.ShowDialog();
+                bool ItemsChanged = true;// TODO - set this in edit window if changed ItemsWindow.ItemsChanged;
+                if (ItemsChanged)
+                {
+                    // reload items list
+
+                    ReloadItemsComboBox();
+                    // reload line items 
+                    ReloadLineItems();
+                    // reload selected invoice datagrid 
+                    ReloadInvoiceDataGrid();
+                }
             }
             catch (Exception ex)
             {
                 MessageBox.Show("Something broke!");
             }
-            // clsMainLogic bool HasItemsChanged will be accessible
-            // if any items change, boolean variable = true, else = false
-            // if true, back in main window, reload combo boxes containing new items 
-            // to refresh combo boxes, requery listitems, then redisplay in combo boxes 
         }
+
+        #endregion
+
+        #region Buttons / Controls
+
+        private void CreateNewInvoiceButton_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                MainLogicClass.SelectedInvoice = MainLogicClass.NewInvoiceUnsaved();
+                InvoiceNumberDisplayLabel.Content = "TBD";
+                TotalCostDisplayLabel.Content = "$0";
+                EditInvoiceButton.IsEnabled = true;
+                InvoiceDatePicker.SelectedDate = null;
+                ReloadInvoiceDataGrid();
+                SetToReadOnly();
+                // only allow user to select a date when creating new invoice 
+                InvoiceDatePicker.IsEnabled = true;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Something broke!");
+            }
+        }
+
+        private void AddItemButton_Click(object sender, RoutedEventArgs e)
+        {
+            // if an item is selected only 
+            if (ItemsComboBox.SelectedItem != null)
+            {
+                ItemDesc SelectedItem = (ItemDesc)ItemsComboBox.SelectedItem;
+                //CreateNewLineItem(int iInvoiceNum, int iLineItemNum, int iItemCode)
+                MainLogicClass.AddLineItemToInvoiceUnsaved(SelectedItem.ItemCode, SelectedItem.ItemDescription, SelectedItem.Cost);
+                // reload invoice datagrid 
+                ReloadInvoiceDataGrid();
+                // Display Total Cost
+                TotalCostDisplayLabel.Content = $"${MainLogicClass.SelectedInvoice.TotalCost}";
+            }
+        }
+
+        private void RemoveItemButton_Click(object sender, RoutedEventArgs e)
+        {
+            // if an item is selected only 
+            if (ItemsComboBox.SelectedItem != null)
+            {
+                ItemDesc SelectedItem = (ItemDesc)ItemsComboBox.SelectedItem;
+                //CreateNewLineItem(int iInvoiceNum, int iLineItemNum, int iItemCode)
+                if (MainLogicClass.SelectedInvoice.LineItemsList.Any(x => x.ItemCode == SelectedItem.ItemCode))
+                {
+                    MainLogicClass.AddLineItemToBeRemovedFromInvoiceUnsaved(SelectedItem.ItemCode, SelectedItem.ItemDescription, SelectedItem.Cost);
+                    // reload invoice datagrid 
+                    ReloadInvoiceDataGrid();
+                    // Display Total Cost
+                    TotalCostDisplayLabel.Content = $"${MainLogicClass.SelectedInvoice.TotalCost}";
+                }
+            }
+        }
+
+        private void EditInvoiceButton_Click(object sender, RoutedEventArgs e)
+        {
+            SetToEdit();
+        }
+
+        private void SaveInvoiceButton_Click(object sender, RoutedEventArgs e)
+        {
+            var selectedDate = InvoiceDatePicker.SelectedDate;
+            if (selectedDate is not null)
+            {
+                if (MainLogicClass.SelectedInvoice != null && MainLogicClass.SelectedInvoice.InvoiceNum != -1)
+                {
+                    MainLogicClass.SaveInvoice();
+                    ReloadLineItems();
+                    // display total cost 
+                    TotalCostDisplayLabel.Content = $"${MainLogicClass.SelectedInvoice.TotalCost}";
+                    ReloadInvoiceDataGrid();
+                }
+                else if (MainLogicClass.SelectedInvoice != null && MainLogicClass.SelectedInvoice.InvoiceNum == -1)
+                {
+                    DateTime NonNullDate = (DateTime)selectedDate;
+                    // save temporary line items added 
+                    var UnsavedLineItems = MainLogicClass.SelectedInvoice.LineItemsList;
+                    // create the invoice and setting it as the selected invoice 
+                    MainLogicClass.SelectedInvoice = MainLogicClass.CreateNewInvoice(NonNullDate, (int)MainLogicClass.GetTotalCost());
+                    // set line items added before creation of invoice 
+                    MainLogicClass.SelectedInvoice.LineItemsList = UnsavedLineItems;
+                    // save the contents of the invoice 
+                    MainLogicClass.SaveInvoice();
+                    // display total cost 
+                    ReloadLineItems();
+                    TotalCostDisplayLabel.Content = $"${MainLogicClass.SelectedInvoice.TotalCost}";
+                    InvoiceNumberDisplayLabel.Content = MainLogicClass.SelectedInvoice.InvoiceNum;
+                    ReloadInvoiceDataGrid();
+                }
+                SetToReadOnly();
+            }
+            else
+            {
+                MessageBox.Show("Must select a date!");
+            }
+
+        }
+
+        private void ItemsComboBox_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        {
+            ItemDesc ItemSelected = (ItemDesc)ItemsComboBox.SelectedItem;
+            IndividualItemCostDisplayLabel.Content = $"${ItemSelected.Cost}";
+        }
+
+        #endregion
+
+        #region Helpers
+        private void ReloadInvoiceDataGrid()
+        {
+            InvoiceDataGrid.ItemsSource = MainLogicClass.SelectedInvoice.LineItemsList;
+            InvoiceDataGrid.Items.Refresh();
+        }
+
+        private void ReloadItemsComboBox()
+        {
+            MainLogicClass.ItemsList = MainLogicClass.GetAllItems();
+            ItemsComboBox.ItemsSource = MainLogicClass.ItemsList;
+            ItemsComboBox.DisplayMemberPath = "ItemDescription";
+            ItemsComboBox.Items.Refresh();
+        }
+
+        private void SetToReadOnly()
+        {
+            SaveInvoiceButton.IsEnabled = false;
+            InvoiceDatePicker.IsEnabled = false;
+            AddItemButton.IsEnabled = false;
+            RemoveItemButton.IsEnabled = false;
+        }
+
+        private void SetToEdit()
+        {
+            SaveInvoiceButton.IsEnabled = true;
+            AddItemButton.IsEnabled = true;
+            RemoveItemButton.IsEnabled = true;
+        }
+
+        private void ReloadLineItems()
+        {
+            MainLogicClass.SelectedInvoice.LineItemsList = MainLogicClass.GetAllLineItemsByInvoiceNumber(MainLogicClass.SelectedInvoice.InvoiceNum);
+        }
+        #endregion
+
     }
 }

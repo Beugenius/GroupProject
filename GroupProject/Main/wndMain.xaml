@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:GroupProject.Main"
         mc:Ignorable="d"
-        Title="wndMain" Height="450" Width="800">
+        Title="wndMain" Height="450" Width="800" FontFamily="Baskerville Old Face" FontSize="14">
     <Window.Background>
         <ImageBrush ImageSource="/Images/DiamondBackground.jpg" Stretch="UniformToFill"/>
     </Window.Background>
@@ -13,6 +13,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height=".15*"></RowDefinition>
             <RowDefinition Height="2*"></RowDefinition>
+            <RowDefinition Height=".25*"></RowDefinition>
             <RowDefinition Height=".2*"></RowDefinition>
         </Grid.RowDefinitions>
 
@@ -57,18 +58,18 @@
                 <Label Grid.Row="5" Grid.Column="0" Content="Items:" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" FontSize="16" FontFamily="Baskerville Old Face" Foreground="White"></Label>
                 <Label Grid.Row="6" Grid.Column="0" Content="Cost:" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" FontSize="16" FontFamily="Baskerville Old Face" Foreground="White"></Label>
 
-                <DatePicker x:Name="InvoiceDatePicker" Grid.Row="1" Grid.Column="1" VerticalContentAlignment="Center" Margin="5,5,5,5" FontSize="16"></DatePicker>
+                <DatePicker x:Name="InvoiceDatePicker" Grid.Row="1" Grid.Column="1" VerticalContentAlignment="Center" Margin="5,5,5,5" FontSize="16" IsEnabled="False"></DatePicker>
                 <Label x:Name="InvoiceNumberDisplayLabel" Grid.Row="2" Grid.Column="1" Content="TBD" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" FontSize="16" FontFamily="Baskerville Old Face" Foreground="White"></Label>
-                <Label x:Name="TotalCostDisplayLabel" Grid.Row="3" Grid.Column="1" Content="$99.99" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" FontSize="16" FontFamily="Baskerville Old Face" Foreground="White"></Label>
-                <ComboBox x:Name="ItemsComboBox" Grid.Row="5" Grid.Column="1" Margin="5,5,5,5"></ComboBox>
-                <Label x:Name="IndividualItemCostDisplayLabel" Grid.Row="6" Grid.Column="1" Content="$24.99" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" FontSize="16" FontFamily="Baskerville Old Face" Foreground="White"></Label>
+                <Label x:Name="TotalCostDisplayLabel" Grid.Row="3" Grid.Column="1" Content="" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" FontSize="16" FontFamily="Baskerville Old Face" Foreground="White"></Label>
+                <ComboBox x:Name="ItemsComboBox" Grid.Row="5" Grid.Column="1" Margin="5,5,5,5" SelectionChanged="ItemsComboBox_SelectionChanged"></ComboBox>
+                <Label x:Name="IndividualItemCostDisplayLabel" Grid.Row="6" Grid.Column="1" Content="" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" FontSize="16" FontFamily="Baskerville Old Face" Foreground="White" Background="#CC000000"></Label>
                 <Grid Grid.Row="7" Grid.Column="1">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"></ColumnDefinition>
                         <ColumnDefinition Width="*"></ColumnDefinition>
                     </Grid.ColumnDefinitions>
-                    <Button x:Name="RemoveItemButton" Grid.Column="0" Content="Remove Item" Margin="5,5,5,5" FontFamily="Baskerville Old Face"></Button>
-                    <Button x:Name="AddItemButton" Grid.Column="1" Content="Add Item" Margin="5,5,5,5" FontFamily="Baskerville Old Face"></Button>
+                    <Button x:Name="RemoveItemButton" Grid.Column="0" Content="Remove Item" Margin="5,5,5,5" FontFamily="Baskerville Old Face" Click="RemoveItemButton_Click" IsEnabled="False"></Button>
+                    <Button x:Name="AddItemButton" Grid.Column="1" Content="Add Item" Margin="5,5,5,5" FontFamily="Baskerville Old Face" Click="AddItemButton_Click" IsEnabled="False"></Button>
                 </Grid>
 
             </Grid>
@@ -81,18 +82,20 @@
                     <RowDefinition Height="*"></RowDefinition>
                 </Grid.RowDefinitions>
                 <Label Grid.Row="0" Content="Items in Invoice" VerticalContentAlignment="Center" FontWeight="Bold" FontSize="25" FontFamily="Baskerville Old Face" Foreground="White"></Label>
-                <DataGrid x:Name="InvoiceDataGrid" Grid.Row="1" d:ItemsSource="{d:SampleData ItemCount=3}" Margin="5,5,5,0">
+                <DataGrid x:Name="InvoiceDataGrid" Grid.Row="1" Margin="5,5,5,0" CanUserAddRows="False">
                 </DataGrid>
                 <Grid Grid.Row="2">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"></ColumnDefinition>
                         <ColumnDefinition Width="*"></ColumnDefinition>
                     </Grid.ColumnDefinitions>
-                    <Button x:Name="EditInvoiceButton" Grid.Column="0" Content="Edit Invoice" Margin="5,5,5,5" FontFamily="Baskerville Old Face"></Button>
-                    <Button x:Name="SaveInvoiceButton" Grid.Column="1" Content="Save Invoice" Margin="5,5,5,5" FontFamily="Baskerville Old Face"></Button>
+                    <Button x:Name="EditInvoiceButton" Grid.Column="0" Content="Edit Invoice" Margin="5,5,5,5" FontFamily="Baskerville Old Face" IsEnabled="False" Click="EditInvoiceButton_Click"></Button>
+                    <Button x:Name="SaveInvoiceButton" Grid.Column="1" Content="Save Invoice" Margin="5,5,5,5" FontFamily="Baskerville Old Face" Click="SaveInvoiceButton_Click" IsEnabled="False"></Button>
                 </Grid>
             </Grid>
         </Grid>
         <!--#endregion-->
+
+        <Button x:Name="CreateNewInvoiceButton" Grid.Row="2" Content="Create New Invoice" Margin="400,5,5,5" Click="CreateNewInvoiceButton_Click"></Button>
     </Grid>
 </Window>

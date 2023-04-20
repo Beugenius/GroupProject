@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GroupProject.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -19,6 +20,7 @@ namespace GroupProject.Search
     /// </summary>
     public partial class wndSearch : Window
     {
+        public Invoices SelectedInvoice = new() { InvoiceNum = 5024, InvoiceDate = DateTime.Parse("04/28/2023")};
         public wndSearch()
         {
             InitializeComponent();

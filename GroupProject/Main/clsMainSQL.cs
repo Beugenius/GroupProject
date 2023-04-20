@@ -18,7 +18,7 @@ namespace GroupProject.Main
         {
             try
             {
-                return $"UPDATE Invoices SET {iTotalCost} = 1200 WHERE InvoiceNum = {iInvoiceNumber}";
+                return $"UPDATE Invoices SET TotalCost = {iTotalCost} WHERE InvoiceNum = {iInvoiceNumber}";
             }
             catch (Exception ex)
             {
@@ -26,11 +26,11 @@ namespace GroupProject.Main
                 throw new Exception(MethodInfo.GetCurrentMethod().DeclaringType.Name + "." + MethodInfo.GetCurrentMethod().Name + " -> " + ex.Message);
             }
         }
-        public string CreateNewLineItem(int iInvoiceNum, int iLineItemNum, int iItemCode)
+        public string CreateNewLineItem(int iInvoiceNum, int iLineItemNum, string sItemCode)
         {
             try
             {
-                return $"INSERT INTO LineItems({iInvoiceNum}, {iLineItemNum}, {iItemCode}) Values({iInvoiceNum}, {iLineItemNum}, '{iItemCode}')";
+                return $"INSERT INTO LineItems(InvoiceNum, LineItemNum, ItemCode) Values({iInvoiceNum}, {iLineItemNum}, '{sItemCode}')";
             }
             catch (Exception ex)
             {
@@ -43,7 +43,7 @@ namespace GroupProject.Main
         {
             try
             {
-                return $"INSERT INTO Invoices({InvoiceDate}, {iTotalCost}) Values(#{InvoiceDate.Date.ToString("M/dd/yyyy")}#, {iTotalCost})";
+                return $"INSERT INTO Invoices(InvoiceDate, TotalCost) Values(#{InvoiceDate.Date.ToString("M/dd/yyyy")}#, {iTotalCost})";
             }
             catch (Exception ex)
             {
@@ -51,11 +51,11 @@ namespace GroupProject.Main
                 throw new Exception(MethodInfo.GetCurrentMethod().DeclaringType.Name + "." + MethodInfo.GetCurrentMethod().Name + " -> " + ex.Message);
             }
         }
-        public string DeleteLineItemByInvoiceId(int iInvoiceNum)
+        public string DeleteLineItemByInvoiceId(int iInvoiceNum, int iLineItemNum)
         {
             try
             {
-                return $"DELETE FROM LineItems WHERE InvoiceNum = {iInvoiceNum}";
+                return $"DELETE FROM LineItems WHERE InvoiceNum = {iInvoiceNum} And LineItemNum = {iLineItemNum}";
             }
             catch (Exception ex)
             {
@@ -80,7 +80,7 @@ namespace GroupProject.Main
         {
             try
             {
-                return $"SELECT LineItems.ItemCode, ItemDesc.ItemDesc, ItemDesc.Cost FROM LineItems, ItemDesc " +
+                return $"SELECT LineItems.ItemCode, LineItems.LineItemNum, ItemDesc.ItemDesc, ItemDesc.Cost FROM LineItems, ItemDesc " +
                           $"Where LineItems.ItemCode = ItemDesc.ItemCode And LineItems.InvoiceNum = {iInvoiceNum}";
                 
             }
@@ -91,6 +91,19 @@ namespace GroupProject.Main
             }
 
         }
-        
+
+        public string GetInvoices()
+        {
+            try
+            {
+                string sSQL = "SELECT * FROM Invoices";
+                return sSQL;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(MethodInfo.GetCurrentMethod().DeclaringType.Name + "." +
+                                   MethodInfo.GetCurrentMethod().Name + " -> " + ex.Message);
+            }
+        }
     }
 }
