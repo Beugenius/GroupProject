@@ -273,8 +273,11 @@ namespace GroupProject.Main
         {
             try
             {
-                ItemDesc ItemSelected = (ItemDesc)ItemsComboBox.SelectedItem;
-                IndividualItemCostDisplayLabel.Content = $"${ItemSelected.Cost}";
+                if (ItemsComboBox.SelectedItem != null)  //added if statement
+                {
+                    ItemDesc ItemSelected = (ItemDesc)ItemsComboBox.SelectedItem;
+                    IndividualItemCostDisplayLabel.Content = $"${ItemSelected.Cost}";
+                }
             }
             catch (Exception ex)
             {

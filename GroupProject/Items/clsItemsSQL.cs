@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace GroupProject.Items
 {
-    internal class clsItemsSQL
+    public class clsItemsSQL
     {
         public string GetItems() 
         { 
@@ -24,33 +24,33 @@ namespace GroupProject.Items
             }
         }
 
-        public string GetInvoiceNum(int iItemCode)
+        public string GetInvoiceNum(string sItemCode)
         {
             try
             {
-                return $"select distinct(InvoiceNum) from LineItems where ItemCode = {iItemCode}";
+                return $"select distinct(InvoiceNum) from LineItems where ItemCode = '{sItemCode}'";
             }
             catch (Exception ex)
             {
                 throw new Exception(MethodInfo.GetCurrentMethod().DeclaringType.Name + "." + MethodInfo.GetCurrentMethod().Name + " -> " + ex.Message);
             }
         }
-        public string UpdateItem(string sItemCode, string sItemDescription, int iCost)
+        public string UpdateItem(string sItemCode, string sItemDescription, decimal iCost)
         {
             try
             {
-                return $"Update ItemDesc Set ItemDesc = {sItemDescription}, Cost = {iCost} where ItemCode = {sItemCode}";
+                return $"Update ItemDesc Set ItemDesc = '{sItemDescription}', Cost = {iCost} where ItemCode = '{sItemCode}'";
             }
             catch (Exception ex)
             {
                 throw new Exception(MethodInfo.GetCurrentMethod().DeclaringType.Name + "." + MethodInfo.GetCurrentMethod().Name + " -> " + ex.Message);
             }
         }
-        public string InsertItem(string sItemCode, string sItemDescription, int iCost)
+        public string InsertItem(string sItemCode, string sItemDescription, decimal iCost)
         {
             try
             {
-                return $"Insert into ItemDesc(ItemCode, ItemDesc, Cost) Values({sItemCode}, {sItemDescription}, {iCost})";
+                return $"Insert into ItemDesc(ItemCode, ItemDesc, Cost) Values('{sItemCode}', '{sItemDescription}', {iCost})";
             }
             catch (Exception ex)
             {
@@ -62,7 +62,7 @@ namespace GroupProject.Items
         {
             try
             {
-                return $"Delete from ItemDesc Where ItemCode = {sItemCode}";
+                return $"Delete from ItemDesc Where ItemCode = '{sItemCode}'";
             }
             catch (Exception ex)
             {

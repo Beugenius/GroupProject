@@ -36,9 +36,9 @@
                 <Label Grid.Column="0" Grid.Row="0" Content="Code: " Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                 <Label Grid.Column="0" Grid.Row="1" Content="Description" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                 <Label Grid.Column="0" Grid.Row="2" Content="Cost:" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                <TextBox x:Name="txtbxCode" Grid.Column="1" Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Center" Width="100" Height="25"/>
-                <TextBox x:Name="txtbxDestription" Grid.Column="1" Grid.Row="1" Width="100" Height="25"/>
-                <TextBox x:Name="txtbxCost" Grid.Column="1" Grid.Row="2" Width="100" Height="25"/>
+                <TextBox x:Name="txtbxCode" Grid.Column="1" Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Center" Width="100" Height="25" IsEnabled="False" MaxLength="4"/>
+                <TextBox x:Name="txtbxDestription" Grid.Column="1" Grid.Row="1" Width="100" Height="25" IsEnabled="False" MaxLength="50"/>
+                <TextBox x:Name="txtbxCost" Grid.Column="1" Grid.Row="2" Width="100" Height="25" IsEnabled="False" MaxLength="10"/>
             </Grid>
             <Grid Grid.Row="1">
                 <Grid.ColumnDefinitions>
@@ -46,12 +46,17 @@
                     <ColumnDefinition/>
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
-                <Button Grid.Column="0" Content="Add Item" Width="100" Height="25" Click="Button_Click"/>
-                <Button Grid.Column="1" Content="Edit Item" Width="100" Height="25" Click="Button_Click_1"/>
-                <Button Grid.Column="2" Content="Delete Item" Width="100" Height="25" Click="Button_Click_2"/>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Button x:Name="btnAddItem" Grid.Column="0" Content="Add Item" Width="100" Height="25" Click="btnAddItem_Click"/>
+                <Button x:Name="btnEditItem" Grid.Column="1" Content="Edit Item" Width="100" Height="25" Click="btnEditItem_Click"/>
+                <Button x:Name="btnDeleteItem" Grid.Column="2" Content="Delete Item" Width="100" Height="25" Click="btnDeleteItem_Click"/>
+                <Button x:Name="btnSaveItem" Grid.Column="1" Grid.Row="1" Content="Save" Width="100" Height="25" Click="btnSaveItem_Click"/>
             </Grid>
             <Label Name="lblError" Grid.Row="2" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Top"/>
         </Grid>
-        <DataGrid x:Name="ItemDataGrid" Grid.Column="1" d:ItemsSource="{d:SampleData ItemCount=5}" Margin="25,25,25,25"/>
+        <DataGrid x:Name="ItemDataGrid" Grid.Column="1" Margin="25,25,25,25" SelectionChanged="ItemDataGrid_SelectionChanged" IsReadOnly="True"/>
     </Grid>
 </Window>
