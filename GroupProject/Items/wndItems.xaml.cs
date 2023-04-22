@@ -1,6 +1,7 @@
 ﻿using GroupProject.ViewModels;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.Metrics;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -233,5 +234,36 @@ namespace GroupProject.Items
                 System.IO.File.AppendAllText("C:\\Error.txt", Environment.NewLine + "Handle Error Exception: " + ex.Message);
             }
         }
+
+        private void txtbxCost_KeyUp(object sender, KeyEventArgs e)
+        {
+            TextBox text = sender as TextBox;
+            string cost = txtbxCost.Text;
+            bool afterDecimal = false;
+            int afterTheDecimal = 2;
+            if (e.Key == Key.Decimal || (e.Key >= Key.NumPad0 && e.Key <= Key.NumPad9) || (e.Key <= Key.D0 && e.Key >= Key.D9))
+            {
+                
+            }
+            else
+            {
+                
+                foreach (char letter in cost)
+                {
+                    if (letter >= 48 && letter <= 57)
+                    {
+
+                    }
+                    else
+                    {
+                        cost = cost.Replace(letter.ToString(), "");
+                    }
+                }
+                
+            }
+            txtbxCost.Text = cost;
+        }
+
+
     }
 }
