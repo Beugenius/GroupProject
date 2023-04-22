@@ -13,5 +13,10 @@ namespace GroupProject.ViewModels
         public DateTime InvoiceDate { get; set; }
         public int TotalCost { get; set; }
         public List<ItemDesc> LineItemsList { get; set; } = new();
+
+        public override string ToString()
+        {
+            return InvoiceNum.ToString() + InvoiceDate.ToString() + TotalCost.ToString();
+        }
     }
 }

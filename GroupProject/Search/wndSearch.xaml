@@ -17,19 +17,19 @@
         <Menu Margin="0,0,0,406" Background="#FF130101"/>
         <Button Content="Search" HorizontalAlignment="Left" Margin="10,5,0,0" VerticalAlignment="Top" Height="18" Cursor="ArrowCD" Foreground="#FFFCFAFA" Background="#FF160000" BorderBrush="#FF090000"/>
         <Label Content="Invoice Number:" HorizontalAlignment="Left" Margin="16,139,0,0" VerticalAlignment="Top" Width="102" Foreground="#FFF7F4F4"/>
-        <ComboBox x:Name="invoiceNumberComboBox" HorizontalAlignment="Left" Margin="140,146,0,0" VerticalAlignment="Top" Width="120"/>
+        <ComboBox x:Name="invoiceNumberComboBox" HorizontalAlignment="Left" Margin="140,146,0,0" VerticalAlignment="Top" Width="120" SelectionChanged="InvoiceComboBoxSelectionChanged"/>
         <Label Content="Invoice Date:" HorizontalAlignment="Left" Margin="33,57,0,0" VerticalAlignment="Top" Width="102" Foreground="#FFF7F4F4"/>
-        <DatePicker HorizontalAlignment="Left" Margin="140,59,0,0" VerticalAlignment="Top" Width="120" Height="24"/>
+        <DatePicker x:Name="InvoiceDatePicker" HorizontalAlignment="Left" Margin="140,59,0,0" VerticalAlignment="Top" Width="120" Height="24" SelectedDateChanged="DateChanged"/>
         <Label Content="Invoice Price:" HorizontalAlignment="Left" Margin="33,241,0,0" VerticalAlignment="Top" Width="102" Foreground="#FFF7F4F4"/>
-        <ComboBox x:Name="invoicePriceComboBox" HorizontalAlignment="Left" Margin="140,245,0,0" VerticalAlignment="Top" Width="120"/>
+        <ComboBox x:Name="invoicePriceComboBox" HorizontalAlignment="Left" Margin="140,245,0,0" VerticalAlignment="Top" Width="120" SelectionChanged="InvoicePriceChanged"/>
         <Button x:Name="SearchWindowclearButton" Content="Clear" HorizontalAlignment="Left" Margin="221,344,0,0" VerticalAlignment="Top" Height="24" Width="82" Click="SearchWindowclearButton_Click"/>
-        <Button x:Name="viewSelectedInvoicebutton" Content="View Selected Invoice" HorizontalAlignment="Left" Margin="59,344,0,0" VerticalAlignment="Top" Height="24" Width="102" FontSize="10" Click="Button_Click"/>
+        <Button x:Name="viewSelectedInvoicebutton" Content="View Selected Invoice" HorizontalAlignment="Left" Margin="59,344,0,0" VerticalAlignment="Top" Height="24" Width="102" FontSize="10" Click="ViewSelectedButtonClick"/>
 
         <!--# Invoice Selection endregion-->
 
         <!--# Invoice list region -->
         <Grid Margin="349,5,-455,0">
-            <DataGrid d:ItemsSource="{d:SampleData ItemCount=5}" Margin="0,-4,0,0"/>
+            <DataGrid x:Name="SearchWindowDataGrid" d:ItemsSource="{d:SampleData ItemCount=5}" Margin="0,-4,0,0" SelectionChanged="DataGrid_SelectionChanged"/>
 
 
         </Grid>
