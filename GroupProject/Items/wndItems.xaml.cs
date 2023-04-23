@@ -65,6 +65,9 @@ namespace GroupProject.Items
                 txtbxCode.IsEnabled = true;
                 txtbxCost.IsEnabled = true;
                 txtbxDestription.IsEnabled = true;
+                txtbxCode.Text = "";
+                txtbxCost.Text = "";
+                txtbxDestription.Text = "";
 
             }
             catch (Exception ex)
@@ -84,8 +87,11 @@ namespace GroupProject.Items
             try
             {
                 item = itemEnum.Edit;
-                ItemDataGrid.IsReadOnly = false;
-                
+                txtbxCode.IsEnabled = false;
+                txtbxCost.IsEnabled = true;
+                txtbxDestription.IsEnabled = true;
+
+
             }
             catch (Exception ex)
             {
@@ -104,7 +110,10 @@ namespace GroupProject.Items
             try
             {
                 item = itemEnum.Delete;
-                ItemDataGrid.IsReadOnly = false;
+                txtbxCode.IsEnabled = false;
+                txtbxCost.IsEnabled = false;
+                txtbxDestription.IsEnabled = false;
+
             }
             catch (Exception ex)
             {
@@ -179,7 +188,7 @@ namespace GroupProject.Items
         {
             try
             {
-                if (!ItemDataGrid.IsReadOnly && ItemDataGrid.SelectedItem != null)
+                if ((item == itemEnum.Edit || item == itemEnum.Delete) && ItemDataGrid.SelectedItem != null)
                 {
                     if (item == itemEnum.Edit)
                     {
@@ -234,7 +243,11 @@ namespace GroupProject.Items
                 System.IO.File.AppendAllText("C:\\Error.txt", Environment.NewLine + "Handle Error Exception: " + ex.Message);
             }
         }
-
+        /// <summary>
+        /// Prevents textbox from having anything but numbers and decimal
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void txtbxCost_KeyUp(object sender, KeyEventArgs e)
         {
             TextBox text = sender as TextBox;
