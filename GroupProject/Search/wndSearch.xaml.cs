@@ -71,6 +71,8 @@ namespace GroupProject.Search
         {
             //this.Close();
             SearchWindowDataGrid.ItemsSource = null;
+            ReloadInvoiceDataGrid();
+            
 
         }
         /// <summary>
@@ -175,9 +177,13 @@ namespace GroupProject.Search
         {
             try
             {
+                //DateTime defaultDate = new DateTime(2023, 4, 22, 0, 0, 0);
                 SearchWindowDataGrid.ItemsSource = SearchLogicClass.GetInvoices();
-                //SearchWindowDataGrid.ItemsSource = SearchLogicClass.InvoicePrices;
-                SearchWindowDataGrid.Items.Refresh();
+                SearchLogicClass.LoadInvoiceList();
+                invoiceNumberComboBox.ItemsSource = SearchLogicClass.InvoiceNumbers_s;
+                invoiceNumberComboBox.Items.Refresh();
+                invoicePriceComboBox.ItemsSource = SearchLogicClass.InvoicePrices_s;
+                invoicePriceComboBox.Items.Refresh();
             }
             catch (Exception ex)
             {
@@ -191,7 +197,7 @@ namespace GroupProject.Search
         private void ViewSelectedButtonClick(object sender, RoutedEventArgs e)
         {
             this.Close();
-            ReloadInvoiceDataGrid();
+            //ReloadInvoiceDataGrid();
         }
         /// <summary>
         /// Stores sekected date when it is picked from the DatePicker

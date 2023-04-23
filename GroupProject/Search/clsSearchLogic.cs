@@ -102,7 +102,6 @@ namespace GroupProject.Search
             }
         }
 
-
         /// <summary>
         /// This calls the GetInvoicesDate SQL query and fills the Invoice list with invoices ordered on a certain date
         /// </summary>
@@ -172,6 +171,21 @@ namespace GroupProject.Search
             try
             {
                 InvoiceList = GetInvoices();
+                InvoiceNumbers_s = new List<string>();
+                InvoicePrices_s = new HashSet<string>();
+                List<int> temp = new List<int>();
+                for (int i = 0; i < InvoiceList.Count; i++)
+                {
+                    InvoiceNumbers_s.Add(InvoiceList[i].InvoiceNum.ToString());
+                    temp.Add(InvoiceList[i].TotalCost);
+                    
+
+                }
+                temp.Sort();
+                for(int i = 0; i < temp.Count; i++)
+                {
+                    InvoicePrices_s.Add(temp[i].ToString());
+                }
             }
             catch (Exception ex)
             {
