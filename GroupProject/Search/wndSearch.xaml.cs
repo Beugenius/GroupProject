@@ -175,7 +175,8 @@ namespace GroupProject.Search
         {
             try
             {
-                SearchWindowDataGrid.ItemsSource = SearchLogicClass.InvoicePrices;
+                SearchWindowDataGrid.ItemsSource = SearchLogicClass.GetInvoices();
+                //SearchWindowDataGrid.ItemsSource = SearchLogicClass.InvoicePrices;
                 SearchWindowDataGrid.Items.Refresh();
             }
             catch (Exception ex)
